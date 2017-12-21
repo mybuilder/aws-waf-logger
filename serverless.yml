@@ -1,0 +1,31 @@
+service: aws-waf-logger
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: prod
+  region: eu-west-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: 'arn:aws:s3:::${self:provider.environment.LOG_BUCKET}/*'
+    - Effect: Allow
+      Action:
+        - waf:*
+      Resource: '*'
+  environment: ${file(./env.yml)}
+
+package:
+  exclude:
+    - env.yml
+    - env.yml.example
+    - README.md
+    - package.json
+
+functions:
+  log:
+    handler: handler.log
+    events:
+      - schedule:
+          rate: rate(${self:provider.environment.CHECK_EVERY_MINUTES} minutes)
