@@ -15,6 +15,7 @@ provider:
     - Effect: Allow
       Action:
         - waf:*
+        - waf-regional:*
       Resource: '*'
   environment: ${file(./env.yml)}
 
@@ -31,3 +32,10 @@ functions:
     events:
       - schedule:
           rate: rate(${self:provider.environment.CHECK_EVERY_MINUTES} minutes)
+
+resources:
+  Resources:
+    Resources:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.LOG_BUCKET}

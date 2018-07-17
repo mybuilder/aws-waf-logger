@@ -11,6 +11,8 @@ This allows us to look at current and historical data about the WAF's actions.
 ### Configuration
 
 You must first specify your desired configuration within `env.yml`, using `env.yml.example` as a template.
+If you are using a regional WAF WEB ACLS for LB WAFS set the REGINAL env variable to true.
+
 This service uses [Serverless](https://serverless.com/) to manage provisioning the Lambda, so with this present on your machine you can simply execute:
 
 ```bash

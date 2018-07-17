@@ -1,8 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const waf = new AWS.WAF();
-
+const waf = (process.env.REGIONAL == 'true') ? new AWS.WAFRegional() : new AWS.WAF();
 const { MAX_WAF_ITEMS } = process.env;
 
 const getRuleIds = (aclId) => new Promise((res, rej) => {
