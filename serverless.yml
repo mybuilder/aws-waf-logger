@@ -39,3 +39,8 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.LOG_BUCKET}
+        LifecycleConfiguration:
+          Rules:
+            - Id: WafLogsRetentionPolicy
+              ExpirationInDays: ${self:provider.environment.RETENTION}
+              Status: Enabled
