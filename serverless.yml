@@ -16,6 +16,7 @@ provider:
       Action:
         - waf:*
         - waf-regional:*
+        - logs:*
       Resource: '*'
   environment: ${file(./env.yml)}
 
@@ -34,9 +35,19 @@ functions:
           rate: rate(${self:provider.environment.CHECK_EVERY_MINUTES} minutes)
 
 resources:
+  Conditions:
+    CreateS3Resources: 
+      Fn::Equals:
+        - ${self:provider.environment.S3_ENABLE}
+        - 'true'
+    CreateLGResources: 
+      Fn::Equals:
+        - ${self:provider.environment.CLOUDWATCH_ENABLE}
+        - 'true'
   Resources:
     Resources:
       Type: AWS::S3::Bucket
+      Condition: CreateS3Resources
       Properties:
         BucketName: ${self:provider.environment.LOG_BUCKET}
         LifecycleConfiguration:
@@ -44,3 +55,9 @@ resources:
             - Id: WafLogsRetentionPolicy
               ExpirationInDays: ${self:provider.environment.RETENTION}
               Status: Enabled
+    WAFLogGroup:
+      Type: AWS::Logs::LogGroup
+      Condition: CreateLGResources      
+      Properties:
+        LogGroupName: ${self:provider.environment.LOG_GROUP}
+        RetentionInDays: ${self:provider.environment.RETENTION}
