@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/mybuilder/aws-waf-logger/issues"
   },
-  "homepage": "https://github.com/mybuilder/aws-waf-logger#readme"
+  "homepage": "https://github.com/mybuilder/aws-waf-logger#readme",
+  "dependencies": {
+    "aws-sdk": "^2.277.1",
+    "lawgs": "^1.0.4"
+  }
 }
